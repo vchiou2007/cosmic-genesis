@@ -24,7 +24,7 @@ export const CONFIG = {
     fov: 60,
     near: 0.1,
     far: 20000,
-    defaultPos: [0, 80, 150],
+    defaultPos: [0, 40, 80],
     // 巡航參數 (Cruise parameters)
     cruiseSpeed: 0.08,       // 整體巡航速度
     orbitRadius: 60,          // 環繞半徑
@@ -62,7 +62,7 @@ export const CONFIG = {
   // ===== 恆星核心設定 (Star Core Settings) =====
   starCore: {
     count: 5,                 // 大恆星數量
-    sizeRange: [1.5, 4.0],
+    sizeRange: [2.5, 6.0],
     pulsationSpeed: 0.5,
     colorTempRange: [3500, 30000], // Kelvin 色溫範圍
     glowIntensity: 1.5,

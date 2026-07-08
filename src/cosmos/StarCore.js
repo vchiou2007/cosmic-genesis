@@ -72,7 +72,7 @@ export class StarCore {
         uColor: { value: color },
         uIntensity: { value: glowIntensity },
         uPulseSpeed: { value: pulseSpeed },
-        uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
+        uPixelRatio: { value: window.devicePixelRatio },
       };
 
       const glowMat = new THREE.ShaderMaterial({

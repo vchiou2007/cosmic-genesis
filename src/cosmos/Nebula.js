@@ -81,7 +81,7 @@ export class Nebula {
 
     this.uniforms = {
       uTime: { value: 0 },
-      uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
+      uPixelRatio: { value: window.devicePixelRatio },
     };
 
     const material = new THREE.ShaderMaterial({

@@ -50,7 +50,7 @@ class SupernovaEvent {
     this.uniforms = {
       uTime: { value: 0 },
       uExplosionTime: { value: startTime },
-      uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
+      uPixelRatio: { value: window.devicePixelRatio },
     };
 
     const mat = new THREE.ShaderMaterial({

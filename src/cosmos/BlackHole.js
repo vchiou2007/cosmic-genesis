@@ -101,7 +101,7 @@ export class BlackHole {
 
       const diskUniforms = {
         uTime: { value: Math.random() * 100 },
-        uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
+        uPixelRatio: { value: window.devicePixelRatio },
       };
 
       const diskMat = new THREE.ShaderMaterial({
@@ -145,7 +145,7 @@ export class BlackHole {
 
       const jetUniforms = {
         uTime: { value: Math.random() * 100 },
-        uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
+        uPixelRatio: { value: window.devicePixelRatio },
         uColor: { value: new THREE.Color(0.6, 0.8, 1.0) },
       };
 

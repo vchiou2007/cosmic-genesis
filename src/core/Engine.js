@@ -111,7 +111,7 @@ export class Engine {
       powerPreference: 'high-performance',
     });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.setPixelRatio(Math.max(1, Math.min(window.devicePixelRatio * quality.scale, 2)));
+    this.renderer.setPixelRatio(window.devicePixelRatio * quality.scale);
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.2;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -360,7 +360,7 @@ export class Engine {
   /** @private 更新渲染品質 */
   _updateRenderingQuality(level) {
     const quality = CONFIG.quality[level];
-    this.renderer.setPixelRatio(Math.max(1, Math.min(window.devicePixelRatio * quality.scale, 2)));
+    this.renderer.setPixelRatio(window.devicePixelRatio * quality.scale);
     this.renderer.setAntialias(quality.aa);
     this.postProcessing.updateQuality();
   }

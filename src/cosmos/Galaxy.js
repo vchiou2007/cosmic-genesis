@@ -108,7 +108,7 @@ export class Galaxy {
 
       // 大小：核心較大 (Size: larger near core)
       const sizeFactor = 0.3 + 0.7 * (1 - radial / this.radius);
-      const starSize = 0.1 + sizeFactor * 0.6;
+      const starSize = 0.5 + sizeFactor * 1.2;
       dummy.scale.set(starSize, starSize, 1);
 
       // 旋轉 (Random rotation)
