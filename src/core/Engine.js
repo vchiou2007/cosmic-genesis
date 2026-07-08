@@ -87,7 +87,7 @@ export class Engine {
 
     // === (1) 建立 Scene ===
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x000000);
+    this.scene.background = new THREE.Color(0x000000); // 純黑背景
 
     hud.setLoadingProgress(0.15);
 
@@ -101,36 +101,34 @@ export class Engine {
 
     hud.setLoadingProgress(0.2);
 
-    // === (3) 建立 Renderer ===
+    // === (3) 建立 Renderer — 最簡化版 ===
     const quality = getQualityConfig();
     this.renderer = new THREE.WebGLRenderer({
-      antialias: quality.aa,
-      powerPreference: 'default',  // 用 default 避免 high-performance 在某些 GPU 上出問題
+      antialias: false,
+      alpha: false,
     });
+
+    // 設定 canvas 樣式 (直接內聯style，確保填滿畫面)
+    const canvas = this.renderer.domElement;
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100vw';
+    canvas.style.height = '100vh';
+    canvas.style.zIndex = '0';
+    canvas.style.display = 'block';
+
+    // 直接附加到 body (最可靠方式)
+    document.body.prepend(canvas);
+
+    // 設定渲染參數
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.setPixelRatio(Math.max(1, Math.min(window.devicePixelRatio * quality.scale, 2)));
-    this.renderer.toneMapping = THREE.NoToneMapping;
+    this.renderer.setPixelRatio(Math.max(1, Math.min(window.devicePixelRatio, 2)));
+    this.renderer.setClearColor(0x000000, 1);
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-    // 安全附加 canvas (Safe canvas attachment)
-    const container = document.getElementById('canvas-container');
-    if (container) {
-      container.appendChild(this.renderer.domElement);
-      // 強制 canvas CSS 填滿容器
-      this.renderer.domElement.style.display = 'block';
-      this.renderer.domElement.style.width = '100%';
-      this.renderer.domElement.style.height = '100%';
-    } else {
-      // 找不到容器就直接附加到 body
-      document.body.appendChild(this.renderer.domElement);
-      this.renderer.domElement.style.position = 'fixed';
-      this.renderer.domElement.style.top = '0';
-      this.renderer.domElement.style.left = '0';
-      this.renderer.domElement.style.width = '100vw';
-      this.renderer.domElement.style.height = '100vh';
-      this.renderer.domElement.style.zIndex = '1';
-      console.warn('[Engine] canvas-container not found, appended to body');
-    }
+    // 記錄 canvas 狀態到 console
+    console.log('[Engine] Canvas attached, size:', canvas.width, 'x', canvas.height, 'DPR:', window.devicePixelRatio);
 
     hud.setLoadingProgress(0.3);
 
