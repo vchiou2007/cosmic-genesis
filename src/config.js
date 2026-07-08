@@ -12,7 +12,9 @@ export const CONFIG = {
 
   // ===== 渲染品質 (Rendering Quality) =====
   quality: {
-    high:   { scale: 1.0, particleRatio: 1.0, bloom: 0.8, shadows: true, aa: true },
+    // scale 為 devicePixelRatio 的倍數：1.0 = 使用螢幕原始解析度
+    // scale is a multiplier of devicePixelRatio: 1.0 = native screen resolution
+    high:   { scale: 1.0, particleRatio: 1.0, bloom: 1.0, shadows: true, aa: true },
     medium: { scale: 0.75, particleRatio: 0.6, bloom: 0.5, shadows: false, aa: true },
     low:    { scale: 0.5, particleRatio: 0.3, bloom: 0.2, shadows: false, aa: false },
   },
