@@ -30,11 +30,11 @@ export class Galaxy {
     this.scene = scene;
     this.mesh = null;
 
-    // 星系核心位置 (分散在不同位置)
+    // 星系核心位置 (分散在不同位置) - 集中在相機附近
     this.position = new THREE.Vector3(
-      (Math.random() - 0.5) * 200,
-      (Math.random() - 0.5) * 80,
-      (Math.random() - 0.5) * 200 - 100
+      (Math.random() - 0.5) * 60,
+      (Math.random() - 0.5) * 30,
+      (Math.random() - 0.5) * 60 - 20
     );
 
     this.armCount = CONFIG.galaxy.armCount[0] +
@@ -106,9 +106,8 @@ export class Galaxy {
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
 
-    // PointsMaterial = 永遠正圓形，永遠面向相機
     const material = new THREE.PointsMaterial({
-      size: 0.6,                    // 基底大小
+      size: 2.5,                    // 加大星星尺寸（從0.6→2.5）
       vertexColors: true,            // 使用每個頂點的顏色
       transparent: false,
       opacity: 1.0,

@@ -36,7 +36,7 @@ export const CONFIG = {
   // ===== 粒子星雲設定 (Nebula / Particle Universe) =====
   nebula: {
     particleCount: 25000,     // 粒子總數（從80,000降為25,000，減少白色霧狀）
-    spread: 800,              // 散佈範圍
+    spread: 300,              // 散佈範圍（從800降為300，集中在相機附近）
     colorHues: [0.55, 0.65, 0.75, 0.85, 0.0, 0.05], // 色相範圍（藍色到紫色到紅色）
     opacityRange: [0.005, 0.04],
     sizeRange: [0.2, 1.0],
@@ -49,7 +49,7 @@ export const CONFIG = {
     starsPerGalaxy: 30000,   // 每個星系的恆星數（instanced mesh）
     armCount: [2, 4],        // 旋臂數量範圍
     armSpread: 0.4,          // 旋臂散佈度
-    radiusRange: [30, 80],   // 星系半徑範圍
+    radiusRange: [15, 35],   // 星系半徑範圍（從30-80縮小為15-35）
     thickness: 2.0,          // 星系厚度
     rotationSpeed: 0.005,    // 自轉速度
     colorPalette: [
