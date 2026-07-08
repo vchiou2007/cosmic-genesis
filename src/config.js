@@ -35,11 +35,11 @@ export const CONFIG = {
 
   // ===== 粒子星雲設定 (Nebula / Particle Universe) =====
   nebula: {
-    particleCount: 80000,     // 粒子總數
+    particleCount: 25000,     // 粒子總數（從80,000降為25,000，減少白色霧狀）
     spread: 800,              // 散佈範圍
     colorHues: [0.55, 0.65, 0.75, 0.85, 0.0, 0.05], // 色相範圍（藍色到紫色到紅色）
-    opacityRange: [0.02, 0.15],
-    sizeRange: [0.3, 2.0],
+    opacityRange: [0.005, 0.04],
+    sizeRange: [0.2, 1.0],
     rotationSpeed: 0.0001,    // 自轉速度
   },
 

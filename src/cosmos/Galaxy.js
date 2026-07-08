@@ -110,8 +110,8 @@ export class Galaxy {
     const material = new THREE.PointsMaterial({
       size: 0.6,                    // 基底大小
       vertexColors: true,            // 使用每個頂點的顏色
-      transparent: true,
-      opacity: 0.95,
+      transparent: false,
+      opacity: 1.0,
       blending: THREE.AdditiveBlending,
       sizeAttenuation: true,         // 遠近縮放
       depthWrite: false,

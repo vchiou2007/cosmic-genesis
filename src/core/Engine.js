@@ -88,7 +88,7 @@ export class Engine {
 
     // === (1) 建立 Scene ===
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x000008);
+    this.scene.background = new THREE.Color(0x000000);
 
     hud.setLoadingProgress(0.15);
 
@@ -110,8 +110,8 @@ export class Engine {
     });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(window.devicePixelRatio * quality.scale);
-    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 0.8;
+    this.renderer.toneMapping = THREE.ReinhardToneMapping;
+    this.renderer.toneMappingExposure = 1.5;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.container.appendChild(this.renderer.domElement);
 
