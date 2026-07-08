@@ -43,7 +43,6 @@ import { HUD } from '../ui/HUD.js';
  */
 export class Engine {
   constructor() {
-    this.container = document.getElementById('canvas-container');
     this.scene = null;
     this.camera = null;
     this.renderer = null;
@@ -106,14 +105,32 @@ export class Engine {
     const quality = getQualityConfig();
     this.renderer = new THREE.WebGLRenderer({
       antialias: quality.aa,
-      powerPreference: 'high-performance',
+      powerPreference: 'default',  // 用 default 避免 high-performance 在某些 GPU 上出問題
     });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.setPixelRatio(window.devicePixelRatio * quality.scale);
+    this.renderer.setPixelRatio(Math.max(1, Math.min(window.devicePixelRatio * quality.scale, 2)));
     this.renderer.toneMapping = THREE.NoToneMapping;
-    this.renderer.toneMappingExposure = 1.5;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
-    this.container.appendChild(this.renderer.domElement);
+
+    // 安全附加 canvas (Safe canvas attachment)
+    const container = document.getElementById('canvas-container');
+    if (container) {
+      container.appendChild(this.renderer.domElement);
+      // 強制 canvas CSS 填滿容器
+      this.renderer.domElement.style.display = 'block';
+      this.renderer.domElement.style.width = '100%';
+      this.renderer.domElement.style.height = '100%';
+    } else {
+      // 找不到容器就直接附加到 body
+      document.body.appendChild(this.renderer.domElement);
+      this.renderer.domElement.style.position = 'fixed';
+      this.renderer.domElement.style.top = '0';
+      this.renderer.domElement.style.left = '0';
+      this.renderer.domElement.style.width = '100vw';
+      this.renderer.domElement.style.height = '100vh';
+      this.renderer.domElement.style.zIndex = '1';
+      console.warn('[Engine] canvas-container not found, appended to body');
+    }
 
     hud.setLoadingProgress(0.3);
 
