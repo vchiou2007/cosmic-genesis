@@ -4,9 +4,9 @@
  * ============================================================================
  *
  * 設計理念 (Design Philosophy):
- * 使用 Three.js InstancedMesh 渲染數萬顆恆星，每顆恆星透過旋臂公式
- * 計算位置，形成壯觀的螺旋星系。支援多種星系型態（2臂、3臂、4臂）。
- * InstancedMesh 大幅減少 Draw Call，讓數萬恆星也能順暢渲染。
+ * 使用 Points + PointsMaterial 渲染數萬顆恆星，每顆恆星為完美的圓形點，
+ * 永遠面向相機。透過旋臂公式計算位置，形成壯觀的螺旋星系。
+ * Points 比 InstancedMesh 更適合大量星點渲染，且自動為正圓。
  *
  * 旋臂公式 (Spiral Arm Formula):
  *   x = radius * cos(angle + radius * twist)
@@ -19,6 +19,7 @@ import { CONFIG } from '../config.js';
 
 /**
  * 星系類別 (Galaxy Class)
+ * 使用 THREE.Points 確保每顆星都是正圓形
  */
 export class Galaxy {
   /**
@@ -49,33 +50,10 @@ export class Galaxy {
     console.log(`[Galaxy ${index}] 星系建立完成 / Created: ${this.armCount} arms, ${this.starCount} stars`);
   }
 
-  /** @private 建立星系 InstancedMesh */
+  /** @private 建立星系 Points 系統 */
   _create() {
     const count = this.starCount;
-    const dummy = new THREE.Object3D();
-
-    // === 建立一顆星的原型 (A single star prototype) ===
-    const starGeo = new THREE.BufferGeometry();
-    const verts = new Float32Array([
-      -0.3, -0.3, 0,
-       0.3, -0.3, 0,
-       0.3,  0.3, 0,
-      -0.3,  0.3, 0,
-    ]);
-    starGeo.setAttribute('position', new THREE.BufferAttribute(verts, 3));
-    starGeo.setIndex([0, 1, 2, 0, 2, 3]);
-
-    // === InstancedMesh ===
-    const starMat = new THREE.MeshBasicMaterial({
-      color: new THREE.Color().setHSL(this._colorSet[0], 0.3, 0.7),
-      transparent: true,
-      opacity: 0.9,
-    });
-
-    this.mesh = new THREE.InstancedMesh(starGeo, starMat, count);
-    this.mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
-
-    // 儲存每個星體的顏色與大小資料
+    const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
     const sizes = new Float32Array(count);
 
@@ -96,26 +74,9 @@ export class Galaxy {
       // 高斯厚度 (Gaussian thickness)
       const thickness = (Math.random() + Math.random() - 1) * CONFIG.galaxy.thickness;
 
-      const x = radial * Math.cos(angle);
-      const z = radial * Math.sin(angle);
-      const y = thickness;
-
-      dummy.position.set(
-        x + (Math.random() - 0.5) * 0.5,
-        y,
-        z + (Math.random() - 0.5) * 0.5
-      );
-
-      // 大小：核心較大 (Size: larger near core)
-      const sizeFactor = 0.3 + 0.7 * (1 - radial / this.radius);
-      const starSize = 0.5 + sizeFactor * 1.2;
-      dummy.scale.set(starSize, starSize, 1);
-
-      // 旋轉 (Random rotation)
-      dummy.rotation.z = Math.random() * Math.PI * 2;
-
-      dummy.updateMatrix();
-      this.mesh.setMatrixAt(i, dummy.matrix);
+      positions[i * 3] = radial * Math.cos(angle) + (Math.random() - 0.5) * 0.5;
+      positions[i * 3 + 1] = thickness;
+      positions[i * 3 + 2] = radial * Math.sin(angle) + (Math.random() - 0.5) * 0.5;
 
       // === 顏色：依溫度變化 (Color by temperature) ===
       const tempMix = Math.random();
@@ -134,29 +95,29 @@ export class Galaxy {
       colors[i * 3] = starColor.r;
       colors[i * 3 + 1] = starColor.g;
       colors[i * 3 + 2] = starColor.b;
-      sizes[i] = starSize;
+
+      // 大小：核心較大 (Size: larger near core)
+      const sizeFactor = 0.3 + 0.7 * (1 - radial / this.radius);
+      sizes[i] = 0.5 + sizeFactor * 0.6;
     }
 
-    this.mesh.instanceMatrix.needsUpdate = true;
-    this.mesh.setColorAt(0, new THREE.Color(1, 1, 1)); // dummy
-    if (this.mesh.instanceColor) {
-      this.mesh.instanceColor.needsUpdate = false;
-    }
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
 
-    // 儲存顏色陣列供更新使用
-    this._colors = colors;
-    this._sizes = sizes;
+    // PointsMaterial = 永遠正圓形，永遠面向相機
+    const material = new THREE.PointsMaterial({
+      size: 0.6,                    // 基底大小
+      vertexColors: true,            // 使用每個頂點的顏色
+      transparent: true,
+      opacity: 0.95,
+      blending: THREE.AdditiveBlending,
+      sizeAttenuation: true,         // 遠近縮放
+      depthWrite: false,
+    });
 
-    // 儲存原始位置供旋轉計算
-    this._positions = [];
-    for (let i = 0; i < count; i++) {
-      const mat = new THREE.Matrix4();
-      this.mesh.getMatrixAt(i, mat);
-      const pos = new THREE.Vector3();
-      pos.setFromMatrixPosition(mat);
-      this._positions.push(pos);
-    }
-
+    this.mesh = new THREE.Points(geometry, material);
     this.mesh.position.copy(this.position);
     this.mesh.name = 'Galaxy';
     this.scene.add(this.mesh);

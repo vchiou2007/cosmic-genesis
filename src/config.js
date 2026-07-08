@@ -21,7 +21,7 @@ export const CONFIG = {
 
   // ===== 相機設定 (Camera Settings) =====
   camera: {
-    fov: 60,
+    fov: 50,
     near: 0.1,
     far: 20000,
     defaultPos: [0, 40, 80],
@@ -39,7 +39,7 @@ export const CONFIG = {
     spread: 800,              // 散佈範圍
     colorHues: [0.55, 0.65, 0.75, 0.85, 0.0, 0.05], // 色相範圍（藍色到紫色到紅色）
     opacityRange: [0.02, 0.15],
-    sizeRange: [0.5, 4.0],
+    sizeRange: [0.3, 2.0],
     rotationSpeed: 0.0001,    // 自轉速度
   },
 
@@ -62,7 +62,7 @@ export const CONFIG = {
   // ===== 恆星核心設定 (Star Core Settings) =====
   starCore: {
     count: 5,                 // 大恆星數量
-    sizeRange: [2.5, 6.0],
+    sizeRange: [1.5, 3.5],
     pulsationSpeed: 0.5,
     colorTempRange: [3500, 30000], // Kelvin 色溫範圍
     glowIntensity: 1.5,
@@ -129,9 +129,9 @@ export const CONFIG = {
 
   // ===== 特效設定 (Post-Processing Effects) =====
   effects: {
-    bloomStrength: 0.8,
-    bloomRadius: 0.3,
-    bloomThreshold: 0.1,
+    bloomStrength: 0.5,
+    bloomRadius: 0.2,
+    bloomThreshold: 0.3,
     chromaticAberration: 0.002,
     vignetteStrength: 0.3,
     filmGrain: 0.05,

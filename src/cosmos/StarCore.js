@@ -86,7 +86,7 @@ export class StarCore {
       });
 
       // 屬性
-      const aSize = new Float32Array([size * 8]);
+      const aSize = new Float32Array([size * 2.0]);
       const aGlow = new Float32Array([1.0]);
       glowGeo.setAttribute('aSize', new THREE.BufferAttribute(aSize, 1));
       glowGeo.setAttribute('aGlow', new THREE.BufferAttribute(aGlow, 1));
